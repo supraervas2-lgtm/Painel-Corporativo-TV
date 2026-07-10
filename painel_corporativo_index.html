@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Supraervas — Painel Corporativo de Produção</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0A1710;
+    --painel:#122A1B;
+    --painel-2:#173420;
+    --borda:#1F3D29;
+    --texto:#F3F6F2;
+    --texto-sub:#8FA396;
+    --texto-fraco:#5E7568;
+    --verde:#34D399;
+    --ambar:#F5A524;
+    --azul:#38BDF8;
+    --supra:#34D399;
+    --braga:#F5A524;
+    --monster:#38BDF8;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html,body{
+    width:100%;height:100%;
+    background:radial-gradient(ellipse 120% 80% at 50% -10%, #163422 0%, var(--bg) 55%);
+    color:var(--texto);
+    font-family:'Manrope',sans-serif;
+    overflow:hidden;
+  }
+  .numeros{font-family:'Space Grotesk',sans-serif;font-variant-numeric:tabular-nums;}
+
+  .tv{
+    width:100vw;height:100vh;
+    display:flex;flex-direction:column;
+    padding:2.2vh 2.4vw;
+    gap:1.8vh;
+  }
+
+  /* ===== TOPO ===== */
+  .topo{
+    display:flex;align-items:center;justify-content:space-between;
+    padding-bottom:1.6vh;
+    border-bottom:1px solid var(--borda);
+  }
+  .marca{display:flex;align-items:center;gap:1vw;}
+  .marca .folha{
+    width:4.2vh;height:4.2vh;border-radius:1vh;
+    background:linear-gradient(135deg,var(--verde),#0F7A4E);
+    display:flex;align-items:center;justify-content:center;
+    font-size:2.2vh;
+    box-shadow:0 0 24px rgba(52,211,153,.35);
+  }
+  .marca h1{font-size:2.6vh;font-weight:800;letter-spacing:.02em;}
+  .marca p{font-size:1.35vh;color:var(--texto-sub);font-weight:500;letter-spacing:.04em;text-transform:uppercase;margin-top:.3vh;}
+
+  .relogio{text-align:right;}
+  .relogio .hora{font-family:'Space Grotesk';font-size:3.4vh;font-weight:700;font-variant-numeric:tabular-nums;line-height:1;}
+  .relogio .data{font-size:1.4vh;color:var(--texto-sub);margin-top:.5vh;text-transform:capitalize;}
+
+  .status-vivo{
+    display:flex;align-items:center;gap:.6vw;
+    font-size:1.3vh;color:var(--texto-sub);font-weight:600;letter-spacing:.05em;text-transform:uppercase;
+  }
+  .pulso{
+    width:1vh;height:1vh;border-radius:50%;background:var(--verde);
+    box-shadow:0 0 0 0 rgba(52,211,153,.6);
+    animation:pulso 2s infinite;
+  }
+  @keyframes pulso{
+    0%{box-shadow:0 0 0 0 rgba(52,211,153,.55);}
+    70%{box-shadow:0 0 0 1.4vh rgba(52,211,153,0);}
+    100%{box-shadow:0 0 0 0 rgba(52,211,153,0);}
+  }
+
+  /* ===== CORPO: 3 UNIDADES ===== */
+  .unidades{
+    flex:1;
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:1.6vw;
+    min-height:0;
+  }
+  .unidade{
+    background:linear-gradient(180deg,var(--painel) 0%, rgba(18,42,27,.5) 100%);
+    border:1px solid var(--borda);
+    border-radius:1.4vh;
+    padding:2vh 1.8vw;
+    display:flex;flex-direction:column;
+    position:relative;
+    overflow:hidden;
+  }
+  .unidade::before{
+    content:"";
+    position:absolute;top:0;left:0;right:0;height:.5vh;
+    background:var(--cor-unidade);
+  }
+  .unidade.braga{--cor-unidade:var(--braga);}
+  .unidade.monster{--cor-unidade:var(--monster);}
+  .unidade.supra{--cor-unidade:var(--supra);}
+
+  .unidade-cabecalho{display:flex;align-items:center;justify-content:space-between;margin-bottom:2vh;}
+  .unidade-nome{display:flex;align-items:center;gap:.8vw;}
+  .unidade-dot{width:1.3vh;height:1.3vh;border-radius:50%;background:var(--cor-unidade);}
+  .unidade-nome h2{font-size:2.3vh;font-weight:800;letter-spacing:.01em;}
+  .unidade-tag{
+    font-size:1.15vh;font-weight:700;color:var(--cor-unidade);
+    background:color-mix(in srgb, var(--cor-unidade) 15%, transparent);
+    padding:.5vh 1vh;border-radius:2vh;text-transform:uppercase;letter-spacing:.06em;
+  }
+  .tag-exemplo{
+    font-size:1vh;font-weight:700;color:var(--texto-fraco);
+    background:rgba(255,255,255,.05);border:1px solid var(--borda);
+    padding:.4vh .9vh;border-radius:2vh;text-transform:uppercase;letter-spacing:.05em;margin-left:.6vh;
+  }
+  .tag-vivo{
+    font-size:1vh;font-weight:800;color:#FCA5A5;
+    background:rgba(220,38,38,.15);border:1px solid rgba(220,38,38,.4);
+    padding:.4vh .9vh;border-radius:2vh;text-transform:uppercase;letter-spacing:.05em;margin-left:.6vh;
+    animation:pulso-vivo 2s infinite;
+  }
+  @keyframes pulso-vivo{ 0%,100%{opacity:1;} 50%{opacity:.55;} }
+
+  /* ===== FAIXA "EM BREVE" ===== */
+  .ribbon-em-breve{
+    position:absolute; top:2.4vh; right:-3.4vw; width:12vw;
+    transform:rotate(45deg);
+    background:linear-gradient(135deg,#FB923C,#EA580C);
+    color:#fff; text-align:center;
+    font-size:1.2vh; font-weight:800; letter-spacing:.1em; text-transform:uppercase;
+    padding:.65vh 0; box-shadow:0 3px 12px rgba(0,0,0,.4);
+    z-index:10; pointer-events:none;
+  }
+  .unidade.braga > *:not(.ribbon-em-breve),
+  .unidade.supra > *:not(.ribbon-em-breve){
+    opacity:.4; filter:grayscale(.35);
+  }
+
+  .stats-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:1vw;margin-bottom:2vh;}
+  .stat{
+    background:var(--painel-2);border:1px solid var(--borda);border-radius:1vh;
+    padding:1.4vh 1vw;text-align:center;
+  }
+  .stat .valor{font-size:3.6vh;font-weight:700;line-height:1;}
+  .stat .rotulo{font-size:1.15vh;color:var(--texto-sub);margin-top:.7vh;text-transform:uppercase;letter-spacing:.05em;font-weight:600;}
+  .stat.hall .valor{color:var(--ambar);}
+  .stat.producao .valor{color:var(--azul);}
+  .stat.final .valor{color:var(--verde);}
+
+  /* ===== SPOTLIGHT: produzindo agora ===== */
+  .spotlight{
+    flex:1;
+    background:var(--painel-2);
+    border:1px solid var(--borda);
+    border-radius:1.2vh;
+    padding:1.8vh 1.6vw;
+    display:flex;flex-direction:column;
+    justify-content:space-between;
+    position:relative;
+  }
+  .spotlight-eyebrow{
+    display:flex;align-items:center;gap:.6vw;
+    font-size:1.15vh;font-weight:700;color:var(--texto-sub);
+    text-transform:uppercase;letter-spacing:.08em;margin-bottom:1.4vh;
+  }
+  .spotlight-eyebrow .ponto-vivo{
+    width:.9vh;height:.9vh;border-radius:50%;background:var(--cor-unidade);
+    animation:pulso 2s infinite;
+  }
+  .spotlight-op{font-size:1.5vh;color:var(--texto-sub);font-weight:600;margin-bottom:.4vh;}
+  .spotlight-produto{font-size:2.5vh;font-weight:800;line-height:1.15;margin-bottom:1.6vh;}
+
+  .spotlight-meta{display:flex;justify-content:space-between;align-items:flex-end;}
+  .spotlight-meta .campo{display:flex;flex-direction:column;gap:.3vh;}
+  .spotlight-meta .campo b{font-size:1.6vh;font-weight:700;}
+  .spotlight-meta .campo span{font-size:1.1vh;color:var(--texto-sub);text-transform:uppercase;letter-spacing:.05em;}
+
+  .barra-tempo{height:.5vh;background:var(--borda);border-radius:1vh;overflow:hidden;margin-top:1.6vh;}
+  .barra-tempo .preenchimento{height:100%;background:var(--cor-unidade);border-radius:1vh;}
+
+  /* ===== PRODUÇÃO: OPs em Pesagem e Mistura ===== */
+  .producao-grid{flex:1;display:grid;grid-template-columns:1fr 1fr;gap:1vw;min-height:0;}
+  .producao-col{
+    background:var(--painel-2);border:1px solid var(--borda);border-radius:1.2vh;
+    padding:1.4vh 1.2vw;display:flex;flex-direction:column;min-height:0;
+  }
+  .producao-col-header{
+    display:flex;align-items:center;gap:.6vw;
+    font-size:1.3vh;font-weight:700;color:var(--texto-sub);text-transform:uppercase;letter-spacing:.06em;
+    margin-bottom:1.2vh;padding-bottom:1vh;border-bottom:1px solid var(--borda);
+  }
+  .producao-col-header .ponto-etapa{width:.9vh;height:.9vh;border-radius:50%;flex:none;}
+  .producao-col-header .ponto-etapa.pes{background:var(--azul);}
+  .producao-col-header .ponto-etapa.mis{background:#C86BFF;}
+  .producao-col-count{
+    margin-left:auto;background:rgba(255,255,255,.08);border-radius:2vh;
+    padding:.2vh 1vh;font-size:1.3vh;color:var(--texto);font-weight:800;
+  }
+  .producao-lista{flex:1;overflow-y:auto;display:flex;flex-direction:column;gap:.8vh;min-height:0;scrollbar-width:none;}
+  .producao-lista::-webkit-scrollbar{display:none;}
+  .producao-item{
+    background:rgba(255,255,255,.03);border:1px solid var(--borda);border-radius:.8vh;
+    padding:1vh 1vw;display:flex;flex-direction:column;gap:.2vh;
+  }
+  .producao-item-topo{display:flex;align-items:baseline;justify-content:space-between;gap:.6vw;}
+  .producao-item-op{font-size:1.25vh;font-weight:700;color:var(--texto-sub);white-space:nowrap;}
+  .producao-item-qtde{font-size:1.25vh;font-weight:700;color:var(--texto-sub);white-space:nowrap;}
+  .producao-item-nome{
+    font-size:1.5vh;font-weight:700;overflow:hidden;text-overflow:ellipsis;
+    white-space:nowrap;
+  }
+  .producao-vazio{flex:1;display:flex;align-items:center;justify-content:center;color:var(--texto-fraco);font-size:1.25vh;text-align:center;}
+
+  /* ===== RODAPÉ: TOTAL CONSOLIDADO ===== */
+  .rodape{
+    background:var(--painel);
+    border:1px solid var(--borda);
+    border-radius:1.4vh;
+    padding:1.6vh 2vw;
+    display:flex;align-items:center;justify-content:space-between;
+  }
+  .rodape-titulo{font-size:1.3vh;color:var(--texto-sub);text-transform:uppercase;letter-spacing:.08em;font-weight:700;}
+  .rodape-numeros{display:flex;gap:3.5vw;}
+  .rodape-item{display:flex;align-items:center;gap:.9vw;}
+  .rodape-item .valor{font-size:3vh;font-weight:700;}
+  .rodape-item .rotulo{font-size:1.2vh;color:var(--texto-sub);text-transform:uppercase;letter-spacing:.05em;margin-top:.2vh;}
+  .rodape-item.final .valor{color:var(--verde);}
+  .rodape-item.producao .valor{color:var(--azul);}
+  .rodape-item.hall .valor{color:var(--ambar);}
+
+  /* ===== OEE POR TURNO (velocímetros) ===== */
+  .turnos-painel{
+    background:var(--painel);border:1px solid var(--borda);border-radius:1.4vh;
+    padding:1.4vh 1.8vw;display:flex;flex-direction:column;gap:1vh;
+  }
+  .turnos-titulo{display:flex;align-items:baseline;justify-content:space-between;}
+  .turnos-titulo span:first-child{font-size:1.5vh;font-weight:800;text-transform:uppercase;letter-spacing:.06em;}
+  .turnos-sub{font-size:1.15vh;color:var(--texto-sub);font-weight:600;}
+  .turnos-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1.2vw;}
+  .gauge-card{
+    background:var(--painel-2);border:1px solid var(--borda);border-radius:1.1vh;
+    padding:1.2vh 1vw;display:flex;flex-direction:column;align-items:center;gap:.4vh;
+  }
+  .gauge-turno-nome{font-size:1.35vh;font-weight:800;letter-spacing:.02em;}
+  .gauge-svg-wrap{position:relative;width:100%;display:flex;justify-content:center;}
+  .gauge-svg-wrap svg{width:9.5vh;height:5.6vh;}
+  .gauge-centro{
+    position:absolute;bottom:0;left:0;right:0;text-align:center;
+    display:flex;flex-direction:column;align-items:center;
+  }
+  .gauge-valor{font-size:2.1vh;font-weight:800;line-height:1;}
+  .gauge-meta{font-size:1vh;color:var(--texto-sub);font-weight:600;margin-top:.1vh;}
+  .gauge-rodape{display:flex;align-items:center;gap:.5vw;margin-top:.2vh;}
+  .gauge-ops{font-size:1.05vh;color:var(--texto-sub);font-weight:600;}
+  .gauge-status{
+    display:flex;align-items:center;gap:.35vw;
+    font-size:1.05vh;font-weight:800;letter-spacing:.03em;
+    padding:.3vh .8vh;border-radius:2vh;
+  }
+  .gauge-status .bolinha{width:.9vh;height:.9vh;border-radius:50%;}
+  .gauge-status.meta{color:var(--verde);background:rgba(52,211,153,.12);}
+  .gauge-status.meta .bolinha{background:var(--verde);box-shadow:0 0 6px rgba(52,211,153,.7);}
+  .gauge-status.abaixo{color:#FCA5A5;background:rgba(220,38,38,.14);}
+  .gauge-status.abaixo .bolinha{background:#F87171;box-shadow:0 0 6px rgba(248,113,113,.7);}
+</style>
+</head>
+<body>
+
+<div class="tv">
+
+  <!-- TOPO -->
+  <div class="topo">
+    <div class="marca">
+      <div class="folha">🌿</div>
+      <div>
+        <h1>SUPRAERVAS</h1>
+        <p>Painel Corporativo de Produção</p>
+      </div>
+    </div>
+    <div class="status-vivo"><span class="pulso"></span> Dados ao vivo</div>
+    <div class="relogio">
+      <div class="hora" id="relogioHora">14:32</div>
+      <div class="data" id="relogioData">quinta-feira, 2 de julho</div>
+    </div>
+  </div>
+
+  <!-- 3 UNIDADES -->
+  <div class="unidades">
+
+    <!-- BRAGA -->
+    <div class="unidade braga">
+      <div class="ribbon-em-breve">Em breve</div>
+      <div class="unidade-cabecalho">
+        <div class="unidade-nome">
+          <span class="unidade-dot"></span>
+          <h2>Braga</h2>
+        </div>
+        <span class="unidade-tag">Unidade 01</span>
+      </div>
+      <div class="stats-row">
+        <div class="stat hall"><div class="valor numeros">–</div><div class="rotulo">Hall</div></div>
+        <div class="stat producao"><div class="valor numeros">–</div><div class="rotulo">Produção</div></div>
+        <div class="stat final"><div class="valor numeros">–</div><div class="rotulo">Hoje</div></div>
+      </div>
+      <div class="spotlight" style="align-items:center;justify-content:center;">
+        <div style="text-align:center;color:var(--texto-fraco);font-size:1.3vh;">
+          Integração com o painel da Braga<br>ainda não disponível
+        </div>
+      </div>
+    </div>
+
+    <!-- MONSTER -->
+    <div class="unidade monster">
+      <div class="unidade-cabecalho">
+        <div class="unidade-nome">
+          <span class="unidade-dot"></span>
+          <h2>Monster</h2>
+        </div>
+        <div style="display:flex;align-items:center;"><span class="unidade-tag">Unidade 02</span><span class="tag-vivo">🔴 Ao vivo</span></div>
+      </div>
+      <div class="stats-row">
+        <div class="stat hall"><div class="valor numeros" id="monsterHall">–</div><div class="rotulo">Hall</div></div>
+        <div class="stat producao"><div class="valor numeros" id="monsterProducao">–</div><div class="rotulo">Produção</div></div>
+        <div class="stat final"><div class="valor numeros" id="monsterHoje">–</div><div class="rotulo">Hoje</div></div>
+      </div>
+      <div class="producao-grid" id="monsterProducaoGrid">
+        <div class="producao-col">
+          <div class="producao-col-header">
+            <span class="ponto-etapa pes"></span> ⚖️ Pesagem
+            <span class="producao-col-count" id="monsterCountPesagem">0</span>
+          </div>
+          <div class="producao-lista" id="monsterListaPesagem">
+            <div class="producao-vazio">Carregando...</div>
+          </div>
+        </div>
+        <div class="producao-col">
+          <div class="producao-col-header">
+            <span class="ponto-etapa mis"></span> 🔄 Mistura
+            <span class="producao-col-count" id="monsterCountMistura">0</span>
+          </div>
+          <div class="producao-lista" id="monsterListaMistura">
+            <div class="producao-vazio">Carregando...</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SUPRA -->
+    <div class="unidade supra">
+      <div class="ribbon-em-breve">Em breve</div>
+      <div class="unidade-cabecalho">
+        <div class="unidade-nome">
+          <span class="unidade-dot"></span>
+          <h2>Supra</h2>
+        </div>
+        <span class="unidade-tag">Unidade 03</span>
+      </div>
+      <div class="stats-row">
+        <div class="stat hall"><div class="valor numeros">–</div><div class="rotulo">Hall</div></div>
+        <div class="stat producao"><div class="valor numeros">–</div><div class="rotulo">Produção</div></div>
+        <div class="stat final"><div class="valor numeros">–</div><div class="rotulo">Hoje</div></div>
+      </div>
+      <div class="spotlight" style="align-items:center;justify-content:center;">
+        <div style="text-align:center;color:var(--texto-fraco);font-size:1.3vh;">
+          Integração com o painel da Supra<br>ainda não disponível
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- OEE POR TURNO -->
+  <div class="turnos-painel">
+    <div class="turnos-titulo">
+      <span>⏱ OEE por Turno</span>
+      <span class="turnos-sub">Monster · hoje · meta 75%</span>
+    </div>
+    <div class="turnos-grid" id="turnosGrid">
+      <!-- cards gerados via JS -->
+    </div>
+  </div>
+
+  <!-- RODAPÉ CONSOLIDADO -->
+  <div class="rodape">
+    <div class="rodape-titulo">Total (Monster · dados ao vivo)</div>
+    <div class="rodape-numeros">
+      <div class="rodape-item hall"><div class="valor numeros" id="rodapeHall">–</div><div class="rotulo">No Hall</div></div>
+      <div class="rodape-item producao"><div class="valor numeros" id="rodapeProducao">–</div><div class="rotulo">Em Produção</div></div>
+      <div class="rodape-item final"><div class="valor numeros" id="rodapeFinal">–</div><div class="rotulo">Finalizadas Hoje</div></div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+const SHEETS_URL = 'https://script.google.com/macros/s/AKfycbwDz3uar9K--nQEBeIXhlhpyxWZUzypHYLLmEUXmcEumfmF_jEvOsfmyoeYCiJaeftF/exec';
+
+function atualizarRelogio(){
+  const agora = new Date();
+  document.getElementById('relogioHora').textContent =
+    agora.toLocaleTimeString('pt-BR', {hour:'2-digit', minute:'2-digit'});
+  const dataStr = agora.toLocaleDateString('pt-BR', {weekday:'long', day:'numeric', month:'long'});
+  document.getElementById('relogioData').textContent = dataStr;
+}
+atualizarRelogio();
+setInterval(atualizarRelogio, 1000);
+
+/* ── Dados reais da Monster ── */
+function escapeHtml(s){ return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+
+function renderListaProducao(containerId, lista, msgVazio){
+  const el = document.getElementById(containerId);
+  if(!lista.length){ el.innerHTML = `<div class="producao-vazio">${msgVazio}</div>`; return; }
+  el.innerHTML = lista.map(o => `
+    <div class="producao-item">
+      <div class="producao-item-topo">
+        <span class="producao-item-op">OP ${escapeHtml(o.op)}</span>
+        <span class="producao-item-qtde">${escapeHtml(o.qtde||'')}</span>
+      </div>
+      <div class="producao-item-nome">${escapeHtml(o.descricao || '(sem descrição)')}</div>
+    </div>`).join('');
+}
+
+/* ── Velocímetro (gauge) de OEE por turno ── */
+function gaugeSvg(percent, corClasse){
+  const r = 40, circ = Math.PI * r;
+  const pct = percent === null ? 0 : Math.max(0, Math.min(100, percent));
+  const dash = (pct/100) * circ;
+  const cor = corClasse === 'abaixo' ? '#F87171' : '#34D399';
+  return `<svg viewBox="0 0 100 58" xmlns="http://www.w3.org/2000/svg">
+    <path d="M10,50 A40,40 0 1 0 90,50" fill="none" stroke="#1F3D29" stroke-width="9" stroke-linecap="round"/>
+    <path d="M10,50 A40,40 0 1 0 90,50" fill="none" stroke="${cor}" stroke-width="9" stroke-linecap="round"
+          stroke-dasharray="${dash.toFixed(2)} ${circ.toFixed(2)}"/>
+  </svg>`;
+}
+
+function renderTurnos(oeePorTurno){
+  const el = document.getElementById('turnosGrid');
+  if(!oeePorTurno){ el.innerHTML = '<div class="producao-vazio">Sem dados de turno</div>'; return; }
+  const ordem = ['1º Turno','2º Turno','3º Turno','Adm'];
+  el.innerHTML = ordem.map(t => {
+    const info = oeePorTurno[t] || { ops:0, geral:null, meta:75, status:'meta' };
+    const valor = (info.geral === null || info.geral === undefined) ? '–' : info.geral.toFixed(1) + '%';
+    const corClasse = info.status === 'abaixo' ? 'abaixo' : 'meta';
+    const statusTexto = info.status === 'abaixo' ? 'Abaixo' : 'Meta';
+    return `
+      <div class="gauge-card">
+        <div class="gauge-turno-nome">${escapeHtml(t)}</div>
+        <div class="gauge-svg-wrap">
+          ${gaugeSvg(info.geral, corClasse)}
+          <div class="gauge-centro"><div class="gauge-valor">${valor}</div></div>
+        </div>
+        <div class="gauge-meta">Meta ${info.meta}%</div>
+        <div class="gauge-rodape">
+          <span class="gauge-ops">${info.ops} OP${info.ops===1?'':'s'}</span>
+          <span class="gauge-status ${corClasse}"><span class="bolinha"></span>${statusTexto}</span>
+        </div>
+      </div>`;
+  }).join('');
+}
+
+async function carregarMonster(){
+  try{
+    const resp = await fetch(SHEETS_URL + '?t=' + Date.now(), { cache:'no-store' });
+    const data = await resp.json();
+    if(data.status !== 'ok') return;
+
+    const hall = data.hall || [];
+    const emProducao = data.emProducao || [];
+    const finalizadas = data.finalizadas || [];
+
+    document.getElementById('monsterHall').textContent = hall.length;
+    document.getElementById('monsterProducao').textContent = emProducao.length;
+    document.getElementById('monsterHoje').textContent = finalizadas.length;
+    document.getElementById('rodapeHall').textContent = hall.length;
+    document.getElementById('rodapeProducao').textContent = emProducao.length;
+    document.getElementById('rodapeFinal').textContent = finalizadas.length;
+
+    // Separa as OPs em produção por etapa
+    const emPesagem = emProducao.filter(o => o.etapa !== 'Mistura');
+    const emMistura = emProducao.filter(o => o.etapa === 'Mistura');
+
+    document.getElementById('monsterCountPesagem').textContent = emPesagem.length;
+    document.getElementById('monsterCountMistura').textContent = emMistura.length;
+    renderListaProducao('monsterListaPesagem', emPesagem, 'Nenhuma OP em Pesagem');
+    renderListaProducao('monsterListaMistura', emMistura, 'Nenhuma OP em Mistura');
+
+    renderTurnos(data.oeePorTurno);
+  }catch(e){
+    console.error(e);
+    document.getElementById('monsterListaPesagem').innerHTML = '<div class="producao-vazio">⚠️ Sem conexão</div>';
+    document.getElementById('monsterListaMistura').innerHTML = '<div class="producao-vazio">⚠️ Sem conexão</div>';
+  }
+}
+carregarMonster();
+setInterval(carregarMonster, 30000);
+</script>
+
+</body>
+</html>
